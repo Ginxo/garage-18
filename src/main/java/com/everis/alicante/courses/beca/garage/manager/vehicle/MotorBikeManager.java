@@ -16,11 +16,9 @@ public class MotorBikeManager extends AbstractVehicleManager<MotorBike> {
 		}
 		return instance;
 	}
-	
+
 	@Override
-	protected MotorBikeDAO getDao() {
+	public MotorBikeDAO getDao() {
 		return MotorBikeDAO.getInstance();
 	}
-
-	
 }

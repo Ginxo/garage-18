@@ -19,7 +19,7 @@ public class BicycleManager extends AbstractVehicleManager<Bicycle> {
 	}
 	
 	@Override
-	protected BicycleDAO getDao() {
+	public BicycleDAO getDao() {
 		return BicycleDAO.getInstance();
 	}
 	

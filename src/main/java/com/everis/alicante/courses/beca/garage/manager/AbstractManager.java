@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class AbstractManager<T extends GarageEntity> {
 
 
-    abstract AbstractDAO<T> getDao();
+    public abstract AbstractDAO<T> getDao();
 
 
     public List<T> findAll() {

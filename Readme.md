@@ -1,0 +1,1 @@
+# Garage Application for the Everis classesNote: this application has a dependency with the [Command Line Menu](https://github.com/Ginxo/commandlinemenu/tree/master/menu)

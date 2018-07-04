@@ -18,7 +18,7 @@ public class CarManager extends AbstractVehicleManager<Car> {
 	}
 
 	@Override
-	protected CarDAO getDao() {
+	public CarDAO getDao() {
 		return CarDAO.getInstance();
 	}
 }
