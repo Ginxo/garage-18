@@ -23,7 +23,7 @@ public abstract class AbstractManager<T extends GarageEntity> {
         getDao().delete(element);
     }
 
-    public T get(final int i) {
-        return getDao().get(i);
+    public T get(final long id) {
+        return getDao().get(id);
     }
 }

@@ -1,81 +1,142 @@
 package com.everis.alicante.courses.beca.garage.dao;
 
 import com.everis.alicante.courses.beca.garage.domain.GarageEntity;
-import org.apache.commons.io.FileUtils;
+import com.everis.alicante.courses.beca.garage.domain.vehicle.Vehicle;
 
-import java.io.*;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public abstract class AbstractDAO<T extends GarageEntity> {
 
-	private File file;
-	
+    private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("garage");
 
-	public List<T> findAll() {
-		List<T> result = new ArrayList<>();
-		openFile();
-		List<String> lines;
-		try {
-			lines = FileUtils.readLines(file, "UTF-8");
-			for (String string : lines) {
-				if(!string.isEmpty()) {
-					result.add(this.build(string.split(";")));
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
+    private Class<T> clazz;
 
-	public void save(final T element) {
-			try {
-				openFile();
-				Writer w;
-				w = new FileWriter(file,true);
-				BufferedWriter bfW= new BufferedWriter(w);
-				bfW.newLine();
-				bfW.append(this.toFile(element));
-				bfW.close();
-				w.close();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	}
+    public AbstractDAO(final Class<T> clazz) {
+        this.clazz = clazz;
+    }
 
-	public void delete(final T element) {
-		List<T> result = new ArrayList<>();
-		result=findAll();
-		for(T o:result) {
-			if(o.toString().equals(element.toString())) {
-				result.remove(o);
-				break;
-			}
-		}
-		file.delete();
-		openFile();
-		for(T o:result) {
-			save(o);
-		}
-	}
+    public List<T> findAll() {
 
-	public T get(final int i) {
-		List<T> result = new ArrayList<>();
-		result=findAll();
-		return result.get(i);
-	}
+        List<T> elements = null;
 
-	public abstract String getFilePath();
+        // Create an EntityManager
+        EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        EntityTransaction transaction = null;
 
-	private void openFile() {
-		file = new File(getFilePath());
-	}
+        try {
+            // Get a transaction
+            transaction = manager.getTransaction();
+            // Begin the transaction
+            transaction.begin();
+            // Get a List of elements
+            elements = manager.createQuery(String.format("SELECT s FROM %s s", clazz.getName()), clazz).getResultList();
+            // Commit the transaction
+            transaction.commit();
+        } catch (Exception ex) {
+            // If there are any exceptions, roll back the changes
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            // Print the Exception
+            ex.printStackTrace();
+        } finally {
+            // Close the EntityManager
+            manager.close();
+        }
+        return elements;
+    }
 
-	public abstract T build(String... strings);
+    public void save(final T element) {
 
-	public abstract String toFile(T element);
+        // Create an EntityManager
+        EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        EntityTransaction transaction = null;
+
+        try {
+            // Get a transaction
+            transaction = manager.getTransaction();
+            // Begin the transaction
+            transaction.begin();
+            // Save the object
+            manager.persist(element);
+            // Commit the transaction
+            transaction.commit();
+        } catch (Exception ex) {
+            // If there are any exceptions, roll back the changes
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            // Print the Exception
+            ex.printStackTrace();
+        } finally {
+            // Close the EntityManager
+            manager.close();
+        }
+    }
+
+    public void delete(final T element) {
+
+        // Create an EntityManager
+        EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        EntityTransaction transaction = null;
+
+        try {
+            // Get a transaction
+            transaction = manager.getTransaction();
+            // Begin the transaction
+            transaction.begin();
+            // Get the object
+            T result = manager.find(this.clazz, element.getId());
+            // Delete the result
+            manager.remove(result);
+            // Commit the transaction
+            transaction.commit();
+        } catch (Exception ex) {
+            // If there are any exceptions, roll back the changes
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            // Print the Exception
+            ex.printStackTrace();
+        } finally {
+            // Close the EntityManager
+            manager.close();
+        }
+    }
+
+    public T get(final long id) {
+
+        T element = null;
+
+        // Create an EntityManager
+        EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        EntityTransaction transaction = null;
+
+        try {
+            // Get a transaction
+            transaction = manager.getTransaction();
+            // Begin the transaction
+            transaction.begin();
+            // Get the object
+            element = manager.find(this.clazz, id);
+            // Commit the transaction
+            transaction.commit();
+        } catch (Exception ex) {
+            // If there are any exceptions, roll back the changes
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            // Print the Exception
+            ex.printStackTrace();
+        } finally {
+            // Close the EntityManager
+            manager.close();
+        }
+        return element;
+    }
 
 }

@@ -1,16 +1,15 @@
 package com.everis.alicante.courses.beca.garage;
 
-import java.util.Scanner;
-
 import com.everis.alicante.courses.beca.garage.domain.vehicle.Bicycle;
 import com.everis.alicante.courses.beca.garage.domain.vehicle.Car;
 import com.everis.alicante.courses.beca.garage.domain.vehicle.MotorBike;
 import com.everis.alicante.courses.beca.garage.manager.vehicle.BicycleManager;
 import com.everis.alicante.courses.beca.garage.manager.vehicle.CarManager;
 import com.everis.alicante.courses.beca.garage.manager.vehicle.MotorBikeManager;
-
 import mingorance.enrique.commandlinemenu.Menu;
 import mingorance.enrique.commandlinemenu.MenuBuilder;
+
+import java.util.Scanner;
 
 
 public class GarageRunner {
@@ -91,53 +90,64 @@ public class GarageRunner {
     private static Car selectCar() {
         System.out.println(CarManager.getInstance().findAll());
         System.out.println("Select an element of the list");
-        int elemento = in.nextInt();
-        return CarManager.getInstance().get(elemento - 1);
+        int element = in.nextInt();
+        return CarManager.getInstance().get(element);
     }
 
     private static MotorBike selectMotorBike() {
         System.out.println(MotorBikeManager.getInstance().findAll());
         System.out.println("Select an element of the list");
-        int elemento = in.nextInt();
-        return MotorBikeManager.getInstance().get(elemento - 1);
+        int element = in.nextInt();
+        return MotorBikeManager.getInstance().get(element);
     }
 
     private static Bicycle selectBicycle() {
         System.out.println(BicycleManager.getInstance().findAll());
         System.out.println("Select an element of the list");
-        int elemento = in.nextInt();
-        return BicycleManager.getInstance().get(elemento - 1);
+        int element = in.nextInt();
+        return BicycleManager.getInstance().get(element);
     }
 
     private static Car carBuilder() {
         System.out.println("Introduce plate");
-        String matricula = in.nextLine();
+        String plate = in.nextLine();
         System.out.println("Introduce color");
         String color = in.nextLine();
         System.out.println("Introduce model");
-        String modelo = in.nextLine();
+        String model = in.nextLine();
 
-        return new Car(matricula, color, modelo);
+        final Car car = new Car();
+        car.setPlate(plate);
+        car.setColor(color);
+        car.setModel(model);
+        return car;
     }
 
     private static MotorBike motorBikeBuilder() {
         System.out.println("Introduce plate");
-        String matricula = in.nextLine();
+        String plate = in.nextLine();
         System.out.println("Introduce color");
         String color = in.nextLine();
         System.out.println("Introduce model");
-        String modelo = in.nextLine();
+        String model = in.nextLine();
 
-        return new MotorBike(matricula, color, modelo);
+        final MotorBike motorBike = new MotorBike();
+        motorBike.setPlate(plate);
+        motorBike.setColor(color);
+        motorBike.setModel(model);
+        return motorBike;
     }
 
     private static Bicycle bicycleBuilder() {
         System.out.println("Introduce color");
         String color = in.nextLine();
         System.out.println("Introduce model");
-        String modelo = in.nextLine();
+        String model = in.nextLine();
 
-        return new Bicycle(color, modelo);
+        final Bicycle bicycle = new Bicycle();
+        bicycle.setColor(color);
+        bicycle.setModel(model);
+        return bicycle;
     }
 
 }

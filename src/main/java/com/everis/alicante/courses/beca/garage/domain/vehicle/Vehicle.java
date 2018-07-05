@@ -1,13 +1,29 @@
 package com.everis.alicante.courses.beca.garage.domain.vehicle;
 
-import com.everis.alicante.courses.beca.garage.domain.GarageEntity;
+import com.sun.istack.internal.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public interface Vehicle extends GarageEntity {
-	
-	String getColor();
-	
-	String getModel();
-	
-	Integer getNumWheels();
-	
+import javax.persistence.*;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Vehicle implements VehicleEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	private VehicleType type;
+
+	private String color;
+	private String model;
+	private Integer numWheels;
+
 }
